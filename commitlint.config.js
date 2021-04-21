@@ -1,20 +1,34 @@
 module.exports = {
   extends: ['@commitlint/config-conventional'],
   rules: {
-    'type-enum': [
-      2,
-      'always',
-      [
-        ':aaa',
-        ':bug:',
-        ':art:',
-        ':tada:',
-        ':bento:',
-        'test'
-      ]
-    ],
-    'type-case': [0, 'never', 'lower-case'],
-    'subject-case': [2, 'always', 'sentence-case'],
-    'subject-empty': [0, 'never']
-  }
+    'gitmoji-rule': [2, 'always'],
+    'type-empty': [0, 'never'],
+    'subject-empty': [2, 'always']
+  },
+  plugins: [
+    {
+      rules: {
+        'gitmoji-rule': ({raw}) => {
+          const type = raw.match(/.*:/)[0]
+          return [
+            gitmojiTypes.find(x => x === type),
+            `This type (${type}) is not available.`,
+          ];
+        }
+      },
+    },
+  ],
 };
+
+const gitmojiTypes = [
+  ':bug:',
+  ':+1:',
+  ':sparkles:',
+  ':books:',
+  ':up:',
+  ':skull:',
+  ':hammer:',
+  ':+1::books:',
+  ':sparkles::books:',
+  ':hammer::books:',
+]
